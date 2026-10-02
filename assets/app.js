@@ -14,6 +14,9 @@
   var app = document.getElementById('app');
   var WD = ['일', '월', '화', '수', '목', '금', '토'];
   var CHARS_PER_MIN = 450; // 공백 제외 글자 수 기준 읽기 속도
+  // 특수 환경(예: claude.ai 아티팩트)용 옵션 — 웹 사이트에서는 비어 있음: { photos: false, print: false, snapshot: '최신 호 주소' }
+  var OPTS = window.DAILY_OPTS || {};
+  var NOPH = OPTS.photos === false;
 
   /* ── 유틸 ─────────────────────────────────────────── */
   function esc(s) {
@@ -33,7 +36,11 @@
   function len(s) { return s ? String(s).replace(/\s+/g, '').length : 0; }
 
   /* ── 컴포넌트 ─────────────────────────────────────── */
+  function srcLink(it) {   // 사진을 쓰지 않는 환경: 출처 표기 + 원문 링크 한 줄
+    return NOPH ? '<a class="src-link" href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer">' + esc(it.source) + ' · 원문 보기 ↗</a>' : '';
+  }
   function photo(it, ratio, eager) {
+    if (NOPH) return '';
     var im = it.image || {};
     var label = '원문 기사 보기 — ' + it.headline + ' (' + it.source + ')';
     var style = '--ar:' + ratio + (im.pos ? ';--pos:' + esc(im.pos) : '');
@@ -62,12 +69,12 @@
   }
   function lead(it) {
     return '<article class="lead"><p class="kicker">' + esc(it.kicker) + '</p>' +
-      headline(it, 'h3') + photo(it, '3 / 2', true) +
+      headline(it, 'h3') + srcLink(it) + photo(it, '3 / 2', true) +
       '<p class="txt">' + esc(it.summary) + '</p>' + facts(it) + why(it) + more(it.more) + '</article>';
   }
   function top(it) {
     return '<article class="item"><p class="kicker">' + esc(it.kicker) + '</p>' +
-      headline(it, 'h3') + photo(it, '2 / 1', true) +
+      headline(it, 'h3') + srcLink(it) + photo(it, '2 / 1', true) +
       '<p class="txt">' + esc(it.summary) + '</p>' + why(it) + more(it.more) + '</article>';
   }
   function track(t, date) {
@@ -78,7 +85,7 @@
       '<p class="kicker">' + esc(t.kicker) + (t.status ? '<span class="st">' + esc(t.status) + '</span>' : '') + '</p>' +
       '<div class="trk-h"><h3>' + esc(t.title) + '</h3>' +
       '<div class="day"><b>' + n + '</b><span>일째</span><i>' + esc(t.sinceLabel || fmtMD(t.since) + ' 시작') + '</i></div></div>' +
-      photo(td, '3 / 2') +
+      srcLink(td) + photo(td, '3 / 2') +
       '<p class="today"><b>오늘</b>' + esc(td.summary) + '</p>' +
       '<ol class="tl">' + tl.map(function (e, i) {
         return '<li' + (i === tl.length - 1 ? ' class="now"' : '') + '><span class="d">' + esc(fmtMD(e.date)) + '</span>' +
@@ -87,7 +94,7 @@
   }
   function brief(it) {
     return '<article class="brf">' + photo(it, '4 / 3') +
-      '<div><p class="kicker">' + esc(it.kicker) + '</p>' + headline(it, 'h4') +
+      '<div><p class="kicker">' + esc(it.kicker) + '</p>' + headline(it, 'h4') + srcLink(it) +
       '<p class="txt">' + esc(it.summary) + '</p></div></article>';
   }
 
@@ -134,10 +141,13 @@
     var tops = (ed.front && ed.front.tops) || [];
 
     function nav(cls) {
+      if (OPTS.snapshot) {   // 스냅샷(아티팩트): 호 이동 대신 최신 호로 가는 링크
+        return '<nav class="' + cls + '" aria-label="최신 호"><a href="' + esc(OPTS.snapshot) + '" target="_blank" rel="noopener noreferrer">매일 갱신되는 최신 호 ↗</a></nav>';
+      }
       return '<nav class="' + cls + '" aria-label="호 이동">' +
         '<a class="' + (prev ? '' : 'off') + '" href="#' + (prev || date) + '" rel="prev">← 이전 호</a>' +
         '<a class="' + (next ? '' : 'off') + '" href="#' + (next || date) + '" rel="next">다음 호 →</a>' +
-        (cls === 'eds' ? '<button type="button" onclick="window.print()">인쇄</button>' : '') + '</nav>';
+        (cls === 'eds' && OPTS.print !== false ? '<button type="button" onclick="window.print()">인쇄</button>' : '') + '</nav>';
     }
     var html =
       '<header class="mast">' +
@@ -159,10 +169,12 @@
       '<footer class="foot">' +
       '<p class="src"><b>출처</b>' + esc(info.sources.join(' · ')) + '</p>' +
       '<p class="fine">' + (ed.generatedAt ? esc(fmtDot(ed.generatedAt.slice(0, 10))) + ' ' + esc(ed.generatedAt.slice(11, 16)) + ' KST 발행 · ' : '') +
-      '요약·편집 Claude · 각 기사의 제목과 링크는 해당 매체가 공개한 것이며, 사진의 저작권은 각 매체에 있습니다. 사진이나 제목을 누르면 원문 기사로 이동합니다. 요약에 오류가 있을 수 있으니 중요한 내용은 원문으로 확인하세요.</p>' +
+      '요약·편집 Claude · 각 기사의 제목과 링크는 해당 매체가 공개한 것이며, ' + (NOPH ? '' : '사진의 저작권은 각 매체에 있습니다. 사진이나 ') + '제목을 누르면 원문 기사로 이동합니다. 요약에 오류가 있을 수 있으니 중요한 내용은 원문으로 확인하세요.' +
+      (OPTS.snapshot ? ' 이 페이지는 ' + esc(fmtDot(date)) + ' 호를 담은 스냅샷이며 자동으로 갱신되지 않습니다.' : '') + '</p>' +
       nav('navs') + '</footer>';
 
-    document.title = SITE.name + ' · ' + fmtDot(date) + ' (제' + (idx >= 0 ? idx + 1 : 1) + '호)';
+    if (!OPTS.snapshot) document.title = SITE.name + ' · ' + fmtDot(date) + ' (제' + (idx >= 0 ? idx + 1 : 1) + '호)';
+    app.classList.toggle('nophotos', NOPH);
     app.innerHTML = html;
     [].forEach.call(app.querySelectorAll('.ht img'), function (im) {
       var box = im.parentNode;
