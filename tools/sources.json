@@ -1,0 +1,84 @@
+{
+  "_comment": "collect.py가 읽는 RSS 목록. 주소가 죽으면 collect.py가 경고만 남기고 건너뜁니다. 매체를 추가/삭제하려면 이 파일만 고치면 됩니다.",
+  "sources": [
+    {
+      "id": "yna", "name": "연합뉴스", "group": "통신·방송",
+      "feeds": [
+        {"section": "종합", "url": "https://www.yna.co.kr/rss/news.xml"},
+        {"section": "정치", "url": "https://www.yna.co.kr/rss/politics.xml"},
+        {"section": "북한", "url": "https://www.yna.co.kr/rss/northkorea.xml"},
+        {"section": "사회", "url": "https://www.yna.co.kr/rss/society.xml"},
+        {"section": "국제", "url": "https://www.yna.co.kr/rss/international.xml"},
+        {"section": "문화", "url": "https://www.yna.co.kr/rss/culture.xml"}
+      ]
+    },
+    {
+      "id": "sbs", "name": "SBS", "group": "통신·방송",
+      "feeds": [
+        {"section": "종합", "url": "https://news.sbs.co.kr/news/headlineRssFeed.do?plink=RSSREADER"},
+        {"section": "정치", "url": "https://news.sbs.co.kr/news/SectionRssFeed.do?sectionId=01&plink=RSSREADER"},
+        {"section": "사회", "url": "https://news.sbs.co.kr/news/SectionRssFeed.do?sectionId=03&plink=RSSREADER"},
+        {"section": "국제", "url": "https://news.sbs.co.kr/news/SectionRssFeed.do?sectionId=07&plink=RSSREADER"},
+        {"section": "문화", "url": "https://news.sbs.co.kr/news/SectionRssFeed.do?sectionId=08&plink=RSSREADER"},
+        {"section": "IT·과학", "url": "https://news.sbs.co.kr/news/SectionRssFeed.do?sectionId=14&plink=RSSREADER"}
+      ]
+    },
+    {
+      "id": "chosun", "name": "조선일보", "group": "종합일간지",
+      "feeds": [
+        {"section": "종합", "url": "https://www.chosun.com/arc/outboundfeeds/rss/?outputType=xml"},
+        {"section": "정치", "url": "https://www.chosun.com/arc/outboundfeeds/rss/category/politics/?outputType=xml"},
+        {"section": "사회", "url": "https://www.chosun.com/arc/outboundfeeds/rss/category/national/?outputType=xml"},
+        {"section": "국제", "url": "https://www.chosun.com/arc/outboundfeeds/rss/category/international/?outputType=xml"},
+        {"section": "문화", "url": "https://www.chosun.com/arc/outboundfeeds/rss/category/culture-life/?outputType=xml"}
+      ]
+    },
+    {
+      "id": "donga", "name": "동아일보", "group": "종합일간지",
+      "feeds": [
+        {"section": "종합", "url": "https://rss.donga.com/total.xml"},
+        {"section": "정치", "url": "https://rss.donga.com/politics.xml"},
+        {"section": "사회", "url": "https://rss.donga.com/national.xml"},
+        {"section": "국제", "url": "https://rss.donga.com/international.xml"},
+        {"section": "문화", "url": "https://rss.donga.com/culture.xml"},
+        {"section": "IT·과학", "url": "https://rss.donga.com/science.xml"}
+      ]
+    },
+    {
+      "id": "hani", "name": "한겨레", "group": "종합일간지",
+      "feeds": [
+        {"section": "종합", "url": "https://www.hani.co.kr/rss/"},
+        {"section": "정치", "url": "https://www.hani.co.kr/rss/politics/"},
+        {"section": "사회", "url": "https://www.hani.co.kr/rss/society/"},
+        {"section": "국제", "url": "https://www.hani.co.kr/rss/international/"},
+        {"section": "문화", "url": "https://www.hani.co.kr/rss/culture/"},
+        {"section": "IT·과학", "url": "https://www.hani.co.kr/rss/science/"}
+      ]
+    },
+    {
+      "id": "khan", "name": "경향신문", "group": "종합일간지",
+      "feeds": [
+        {"section": "종합", "url": "https://www.khan.co.kr/rss/rssdata/total_news.xml"},
+        {"section": "정치", "url": "https://www.khan.co.kr/rss/rssdata/politic_news.xml"},
+        {"section": "사회", "url": "https://www.khan.co.kr/rss/rssdata/society_news.xml"},
+        {"section": "국제", "url": "https://www.khan.co.kr/rss/rssdata/kh_world.xml"},
+        {"section": "문화", "url": "https://www.khan.co.kr/rss/rssdata/culture_news.xml"},
+        {"section": "IT·과학", "url": "https://www.khan.co.kr/rss/rssdata/science_news.xml"}
+      ]
+    },
+    {
+      "id": "etnews", "name": "전자신문", "group": "전문매체",
+      "feeds": [
+        {"section": "IT·과학", "url": "https://rss.etnews.com/Section901.xml"},
+        {"section": "IT·과학", "url": "https://rss.etnews.com/Section902.xml"},
+        {"section": "IT·과학", "url": "https://rss.etnews.com/Section903.xml"}
+      ]
+    },
+    {
+      "id": "zdnet", "name": "ZDNet Korea", "group": "전문매체",
+      "feeds": [
+        {"section": "IT·과학", "url": "https://feeds.feedburner.com/zdkorea"}
+      ]
+    }
+  ]
+}
